@@ -34,6 +34,7 @@ export class UserService {
         password: hashedPassword,
       },
       select: {
+        id: true,
         name: true,
         email: true,
       },
@@ -105,5 +106,15 @@ export class UserService {
     });
 
     return updatedUser;
+  }
+
+  async remove(id: string): Promise<{ message: string }> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado ou não existe.');
+    }
+
+    await this.prisma.user.delete({ where: { id } });
+    return { message: 'Usuário removido com sucesso.' };
   }
 }
