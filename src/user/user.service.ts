@@ -6,6 +6,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,7 +22,7 @@ export class UserService {
     });
 
     if (existingUser) {
-      throw new ConflictException(' Usuário ou senha incorretos');
+      throw new ConflictException(' Usuário ou senha incorretos.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -66,9 +67,43 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException('Usuário não encontrado ou não existe');
+      throw new NotFoundException('Usuário não encontrado ou não existe.');
     }
 
     return user;
+  }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado ou não existe.');
+    }
+
+    if (updateUserDto.email && updateUserDto.email !== user.email) {
+      const emailInUse = await this.prisma.user.findUnique({
+        where: { email: updateUserDto.email },
+      });
+
+      if (emailInUse) {
+        throw new ConflictException('E-mail já está em uso por outro usuário.');
+      }
+    }
+
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    return updatedUser;
   }
 }
