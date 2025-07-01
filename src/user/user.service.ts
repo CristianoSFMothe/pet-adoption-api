@@ -49,6 +49,17 @@ export class UserService {
         id: true,
         name: true,
         email: true,
+        addresses: {
+          select: {
+            id: true,
+            street: true,
+            number: true,
+            zipCode: true,
+            neighborhood: true,
+            complement: true,
+            state: true,
+          },
+        },
       },
     });
 
@@ -64,6 +75,17 @@ export class UserService {
         id: true,
         name: true,
         email: true,
+        addresses: {
+          select: {
+            id: true,
+            street: true,
+            number: true,
+            zipCode: true,
+            neighborhood: true,
+            complement: true,
+            state: true,
+          },
+        },
       },
     });
 
