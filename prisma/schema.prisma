@@ -59,7 +59,7 @@ model Address {
   state        State 
 
   userId       String
-  user         User     @relation("UserAddresses", fields: [userId], references: [id])
+  user         User     @relation("UserAddresses", fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt    DateTime @default(now()) 
   updatedAt    DateTime @updatedAt     
