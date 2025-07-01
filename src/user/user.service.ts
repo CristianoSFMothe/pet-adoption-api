@@ -60,6 +60,14 @@ export class UserService {
             state: true,
           },
         },
+        phones: {
+          select: {
+            id: true,
+            phoneNumber: true,
+            isWhatsapp: true,
+            isPrimary: true,
+          },
+        },
       },
     });
 
@@ -84,6 +92,14 @@ export class UserService {
             neighborhood: true,
             complement: true,
             state: true,
+          },
+        },
+        phones: {
+          select: {
+            id: true,
+            phoneNumber: true,
+            isWhatsapp: true,
+            isPrimary: true,
           },
         },
       },
