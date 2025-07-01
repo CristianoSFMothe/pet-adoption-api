@@ -7,6 +7,36 @@ datasource db {
   url      = env("DATABASE_URL") 
 }
 
+enum State {
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
+}
+
 model User {
   id        String   @id @default(uuid()) 
   name      String   
@@ -26,7 +56,7 @@ model Address {
   zipCode      String   
   neighborhood String  
   complement   String?  
-  state        String  
+  state        State 
 
   userId       String
   user         User     @relation("UserAddresses", fields: [userId], references: [id])

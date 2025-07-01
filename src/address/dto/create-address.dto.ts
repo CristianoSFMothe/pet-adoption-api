@@ -4,7 +4,9 @@ import {
   Matches,
   IsOptional,
   IsUUID,
+  IsEnum,
 } from 'class-validator';
+import { StateEnum } from 'src/common/enums/state.enum';
 
 export class CreateAddressDto {
   @IsString({
@@ -48,13 +50,13 @@ export class CreateAddressDto {
   })
   complement?: string;
 
-  @IsString({
-    message: 'O estado deve ser inválido.',
+  @IsEnum(StateEnum, {
+    message: 'O estado deve ser uma sigla válida (ex: SP, RJ, MG).',
   })
   @IsNotEmpty({
     message: 'O estado não pode ser vazio.',
   })
-  state: string;
+  state: StateEnum;
 
   @IsUUID('4', {
     message: 'O ID do usuário deve ser um UUID válido.',
