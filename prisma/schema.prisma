@@ -1,10 +1,12 @@
+// prisma/schema.prisma
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") 
+  url      = env("DATABASE_URL")
 }
 
 enum State {
@@ -37,44 +39,80 @@ enum State {
   TO
 }
 
+enum CoatType {
+  SHORT
+  MEDIUM
+  LONG
+  WIRE
+  CURLY
+  SILKY
+  FLUFFY
+  HAIRLESS
+}
+
 model User {
-  id        String   @id @default(uuid()) 
-  name      String   
-  email     String   @unique 
-  password  String  
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
 
-  addresses Address[] @relation("UserAddresses") 
+  addresses Address[] @relation("UserAddresses")
   phones    Phone[]   @relation("UserPhones")
+  pets      Pet[]     @relation("PetOwner")
 
-  createdAt DateTime @default(now()) 
-  updatedAt DateTime @updatedAt      
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Address {
-  id           String   @id @default(uuid()) 
-  street       String   
-  number       String   
-  zipCode      String   
-  neighborhood String  
-  complement   String?  
-  state        State 
+  id           String  @id @default(uuid())
+  street       String
+  number       String
+  zipCode      String
+  neighborhood String
+  complement   String?
+  state        State
 
-  userId       String
-  user         User     @relation("UserAddresses", fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation("UserAddresses", fields: [userId], references: [id], onDelete: Cascade)
+  pets   Pet[]  @relation("PetOwnerAddress")
 
-  createdAt    DateTime @default(now()) 
-  updatedAt    DateTime @updatedAt     
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Phone {
   id          String  @id @default(uuid())
-  phoneNumber String  
-  isWhatsapp  Boolean @default(false) 
-  isPrimary   Boolean @default(false) 
+  phoneNumber String
+  isWhatsapp  Boolean @default(false)
+  isPrimary   Boolean @default(false)
 
-  userId      String  
-  user        User    @relation("UserPhones", fields: [userId], references: [id], onDelete: Cascade) 
+  userId String
+  user   User   @relation("UserPhones", fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pet {
+  id                     String    @id @default(uuid())
+  name                   String
+  type                   String
+  breed                  String?
+  isPurebred             Boolean   @default(false)
+  color                  String?
+  coatType               CoatType?
+  age                    Int
+  description            String?
+  isAvailableForAdoption Boolean   @default(true)
+  imageUrl               String?
+
+  ownerId String
+  owner   User   @relation("PetOwner", fields: [ownerId], references: [id])
+
+  ownerAddressId String
+  ownerAddress   Address @relation("PetOwnerAddress", fields: [ownerAddressId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

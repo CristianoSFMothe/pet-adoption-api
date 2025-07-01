@@ -51,7 +51,6 @@ export class UserService {
         email: true,
         addresses: {
           select: {
-            id: true,
             street: true,
             number: true,
             zipCode: true,
@@ -62,10 +61,33 @@ export class UserService {
         },
         phones: {
           select: {
-            id: true,
             phoneNumber: true,
             isWhatsapp: true,
             isPrimary: true,
+          },
+        },
+        pets: {
+          select: {
+            name: true,
+            type: true,
+            breed: true,
+            isPurebred: true,
+            color: true,
+            coatType: true,
+            age: true,
+            description: true,
+            isAvailableForAdoption: true,
+            imageUrl: true,
+            ownerAddress: {
+              select: {
+                street: true,
+                number: true,
+                zipCode: true,
+                neighborhood: true,
+                complement: true,
+                state: true,
+              },
+            },
           },
         },
       },
@@ -85,7 +107,6 @@ export class UserService {
         email: true,
         addresses: {
           select: {
-            id: true,
             street: true,
             number: true,
             zipCode: true,
@@ -96,10 +117,33 @@ export class UserService {
         },
         phones: {
           select: {
-            id: true,
             phoneNumber: true,
             isWhatsapp: true,
             isPrimary: true,
+          },
+        },
+        pets: {
+          select: {
+            name: true,
+            type: true,
+            breed: true,
+            isPurebred: true,
+            color: true,
+            coatType: true,
+            age: true,
+            description: true,
+            isAvailableForAdoption: true,
+            imageUrl: true,
+            ownerAddress: {
+              select: {
+                street: true,
+                number: true,
+                zipCode: true,
+                neighborhood: true,
+                complement: true,
+                state: true,
+              },
+            },
           },
         },
       },

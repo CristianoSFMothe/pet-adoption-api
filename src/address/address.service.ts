@@ -64,4 +64,81 @@ export class AddressService {
       data: { ...updateAddressDto },
     });
   }
+
+  async findAll() {
+    return this.prisma.address.findMany({
+      select: {
+        id: true,
+        street: true,
+        number: true,
+        zipCode: true,
+        neighborhood: true,
+        complement: true,
+        state: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+            phones: {
+              select: {
+                phoneNumber: true,
+                isWhatsapp: true,
+                isPrimary: true,
+              },
+            },
+          },
+        },
+        pets: {
+          select: {
+            name: true,
+            type: true,
+            breed: true,
+            isAvailableForAdoption: true,
+          },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const address = await this.prisma.address.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        street: true,
+        number: true,
+        zipCode: true,
+        neighborhood: true,
+        complement: true,
+        state: true,
+        user: {
+          select: {
+            name: true,
+            email: true,
+            phones: {
+              select: {
+                phoneNumber: true,
+                isWhatsapp: true,
+                isPrimary: true,
+              },
+            },
+          },
+        },
+        pets: {
+          select: {
+            name: true,
+            type: true,
+            breed: true,
+            isAvailableForAdoption: true,
+          },
+        },
+      },
+    });
+
+    if (!address) {
+      throw new NotFoundException('Endereço não encontrado ou não existe.');
+    }
+
+    return address;
+  }
 }
